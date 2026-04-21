@@ -322,19 +322,19 @@ if (heroTitle && window.matchMedia('(hover: hover)').matches) {
     });
 
     // ── radar scan line ────────────────────────────────────
-    scanY = (scanY + 0.4) % H;
+    scanY = (scanY + 0.8) % H;
     // Soft halo above/below the line
     const halo = ctx.createLinearGradient(0, scanY - 12, 0, scanY + 12);
     halo.addColorStop(0,   `rgba(${RED},0)`);
-    halo.addColorStop(0.5, `rgba(${RED},0.12)`);
+    halo.addColorStop(0.5, `rgba(${RED},0.06)`);
     halo.addColorStop(1,   `rgba(${RED},0)`);
     ctx.fillStyle = halo;
     ctx.fillRect(0, scanY - 12, W, 24);
     // Bright core line
     const sg = ctx.createLinearGradient(0, 0, W, 0);
     sg.addColorStop(0,    `rgba(${RED},0)`);
-    sg.addColorStop(0.08, `rgba(${RED},0.9)`);
-    sg.addColorStop(0.92, `rgba(${RED},0.9)`);
+    sg.addColorStop(0.08, `rgba(${RED},0.45)`);
+    sg.addColorStop(0.92, `rgba(${RED},0.45)`);
     sg.addColorStop(1,    `rgba(${RED},0)`);
     ctx.fillStyle = sg;
     ctx.fillRect(0, scanY - 1, W, 2);
