@@ -48,11 +48,11 @@ img, video { display: block; max-width: 100%; }
 /* ── Typography helpers ── */
 .sec-tag {
   display: inline-block;
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--red);
+  color: #E8321F;
   margin-bottom: 0.875rem;
 }
 
@@ -632,7 +632,7 @@ img, video { display: block; max-width: 100%; }
    ============================================================ */
 .services {
   background: var(--black);
-  padding: 8rem 2rem;
+  padding: 5.5rem 2rem 8rem;
 }
 
 .srv-grid {
@@ -820,7 +820,7 @@ img, video { display: block; max-width: 100%; }
 }
 
 .about-copy .sec-title { margin-bottom: 2rem; color: var(--black); }
-.about-copy .sec-tag   { margin-bottom: .625rem; }
+.about-copy .sec-tag   { margin-bottom: .625rem; color: var(--red); }
 
 .about-p {
   font-size: 1rem;
