@@ -22,8 +22,12 @@ const nav       = document.getElementById('nav');
 const hamburger = document.getElementById('hamburger');
 const mobMenu   = document.getElementById('mobMenu');
 
+const heroWordmark = document.querySelector('.hero-wordmark');
+
 window.addEventListener('scroll', () => {
-  nav.classList.toggle('solid', window.scrollY > 40);
+  const scrolled = window.scrollY > 60;
+  nav.classList.toggle('solid', scrolled);
+  if (heroWordmark) heroWordmark.classList.toggle('out', scrolled);
 }, { passive: true });
 
 hamburger.addEventListener('click', () => {

@@ -392,6 +392,24 @@ img, video { display: block; max-width: 100%; }
   padding: 0 2rem;
 }
 
+/* Hero wordmark — large on load, fades out on scroll */
+.hero-wordmark {
+  display: block;
+  width: clamp(160px, 28vw, 280px);
+  height: auto;
+  margin-bottom: 2.75rem;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.7s 0.1s var(--ease) forwards;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.hero-wordmark.out {
+  animation: none;
+  opacity: 0;
+  transform: translateY(-14px) scale(0.88);
+  pointer-events: none;
+}
+
 .hero-tag {
   display: flex;
   align-items: center;
@@ -1312,10 +1330,11 @@ img, video { display: block; max-width: 100%; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
 
-  /* Reduce horizontal padding so content uses full width */
-  .wrap { padding: 0 1.25rem; }
+  /* Horizontal padding — match hero-inner at 1.25rem */
+  .wrap       { padding: 0 1.25rem; }
+  .hero-inner { padding: 0 1.25rem; }
 
-  /* Section vertical padding: desktop 8rem → mobile 4rem */
+  /* Section vertical padding: desktop 8rem → mobile ~4rem */
   .stats    { padding: 3rem 1.25rem; }
   .services { padding: 4rem 1.25rem; }
   .about    { padding: 4rem 1.25rem; }
@@ -1325,6 +1344,15 @@ img, video { display: block; max-width: 100%; }
   .cta-band { padding: 4rem 1.25rem; }
   .contact  { padding: 4rem 1.25rem; }
   .footer   { padding: 3rem 1.25rem 1.5rem; }
+
+  /* Scroll hint overlaps CTAs on mobile — hide it */
+  .scroll-hint { display: none; }
+
+  /* Hero wordmark smaller on mobile, less gap */
+  .hero-wordmark { width: clamp(130px, 42vw, 200px); margin-bottom: 1.75rem; }
+
+  /* Hero title needs less bottom gap with extra wordmark content */
+  .hero-title { margin-bottom: 2rem; }
 
   /* Tighter internal gaps */
   .sec-hd { margin-bottom: 2rem; }
