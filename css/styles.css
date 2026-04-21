@@ -192,7 +192,15 @@ img, video { display: block; max-width: 100%; }
   font-weight: 800;
   letter-spacing: 0.04em;
   color: var(--cream);
-  transition: color .3s;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: color .3s, opacity .4s var(--ease), transform .4s var(--ease);
+}
+.nav.solid .nav-logo {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 .nav-logo:hover { color: var(--red); }
 
@@ -300,6 +308,7 @@ img, video { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   padding-top: var(--nav-h);
+  padding-bottom: 5rem;
   overflow: hidden;
   background:
     linear-gradient(rgba(10,10,10,.68), rgba(10,10,10,.68)),
@@ -435,7 +444,7 @@ img, video { display: block; max-width: 100%; }
 
 .hero-title {
   font-family: var(--ff-disp);
-  font-size: clamp(5.5rem, 14vw, 17rem);
+  font-size: clamp(5.5rem, 11vw, 12.5rem);
   line-height: .87;
   letter-spacing: -.01em;
   margin-bottom: 3.5rem;
