@@ -22,7 +22,7 @@ const nav       = document.getElementById('nav');
 const hamburger = document.getElementById('hamburger');
 const mobMenu   = document.getElementById('mobMenu');
 
-const heroWordmark = document.querySelector('.hero-wordmark');
+const heroWordmark = document.querySelector('.hero-brand');
 
 window.addEventListener('scroll', () => {
   const scrolled = window.scrollY > 60;
@@ -41,6 +41,38 @@ document.querySelectorAll('.mob-link').forEach(l => {
     hamburger.classList.remove('open');
     mobMenu.classList.remove('open');
     document.body.style.overflow = '';
+  });
+});
+
+// ── Language selector (visual only — content i18n pendiente) ──
+const lang = document.getElementById('lang');
+if (lang) {
+  const langBtn = lang.querySelector('.lang-btn');
+  const langCur = lang.querySelector('.lang-cur');
+  langBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = lang.classList.toggle('open');
+    langBtn.setAttribute('aria-expanded', open);
+  });
+  lang.querySelectorAll('.lang-menu a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      lang.querySelectorAll('.lang-menu a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      langCur.textContent = a.dataset.lang;
+      lang.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('click', () => lang.classList.remove('open'));
+}
+
+// Mobile language pills (visual only)
+document.querySelectorAll('.mob-lang a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.mob-lang a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
   });
 });
 
@@ -107,8 +139,8 @@ if (track && pPrev && pNext) {
 document.querySelectorAll('.magnetic').forEach(btn => {
   btn.addEventListener('mousemove', e => {
     const r  = btn.getBoundingClientRect();
-    const dx = (e.clientX - (r.left + r.width  / 2)) * 0.28;
-    const dy = (e.clientY - (r.top  + r.height / 2)) * 0.28;
+    const dx = (e.clientX - (r.left + r.width  / 2)) * 0.12;
+    const dy = (e.clientY - (r.top  + r.height / 2)) * 0.12;
     btn.style.transform  = `translate(${dx}px, ${dy}px)`;
     btn.style.transition = '';
   });
@@ -139,36 +171,46 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
+// ── Snackbar ───────────────────────────────────────────────
+const snackbar = document.getElementById('snackbar');
+let snackTimer;
+function showSnack(msg, isError) {
+  if (!snackbar) return;
+  snackbar.classList.toggle('error', !!isError);
+  snackbar.querySelector('.snack-msg').textContent = msg;
+  snackbar.querySelector('.snack-ico').textContent = isError ? '!' : '✓';
+  snackbar.classList.add('show');
+  clearTimeout(snackTimer);
+  snackTimer = setTimeout(() => snackbar.classList.remove('show'), 4200);
+}
+
 // ── Contact form ───────────────────────────────────────────
 const form = document.getElementById('contactForm');
 if (form) {
   form.addEventListener('submit', e => {
     e.preventDefault();
 
-    const btn   = form.querySelector('button[type="submit"]');
-    const orig  = btn.innerHTML;
+    const name    = form.querySelector('#name').value.trim();
+    const email   = form.querySelector('#email').value.trim();
+    const message = form.querySelector('#msg').value.trim();
 
-    btn.innerHTML = 'Enviado ✓';
-    btn.style.background = '#2B8C1B';
-    btn.disabled = true;
+    if (!name || !email || !message) {
+      showSnack('Completa los campos obligatorios.', true);
+      return;
+    }
+
+    const btn  = form.querySelector('button[type="submit"]');
+    const orig = btn.innerHTML;
+    btn.disabled  = true;
+    btn.innerHTML = '<span>Enviando…</span>';
 
     setTimeout(() => {
-      btn.innerHTML   = orig;
-      btn.style.background = '';
-      btn.disabled    = false;
+      showSnack('¡Gracias! Te responderemos en menos de 24 h laborables.');
+      btn.innerHTML = orig;
+      btn.disabled  = false;
       form.reset();
-    }, 3500);
+    }, 700);
   });
-}
-
-// ── Parallax on hero title (subtle) ───────────────────────
-const heroTitle = document.querySelector('.hero-title');
-if (heroTitle && window.matchMedia('(hover: hover)').matches) {
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    heroTitle.style.transform = `translateY(${y * 0.12}px)`;
-    heroTitle.style.opacity   = 1 - (y / window.innerHeight) * 1.5;
-  }, { passive: true });
 }
 
 // ── Hero Canvas Shader ─────────────────────────────────────
@@ -178,7 +220,7 @@ if (heroTitle && window.matchMedia('(hover: hover)').matches) {
 
   const ctx   = canvas.getContext('2d');
   const hero  = canvas.closest('.hero');
-  const RED   = '204,43,27';
+  const RED   = '223,12,22';
   const GAP   = 50;
   const PUSH  = 140;   // mouse repel radius
   const STR   = 62;    // repel strength

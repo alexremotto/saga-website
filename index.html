@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -20,9 +20,8 @@
   <!-- ── NAVIGATION ── -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <img src="Isotipo%20(Home).png" alt="" class="nav-iso" aria-hidden="true">
-        <span>saga</span>
+      <a href="#" class="nav-logo" aria-label="SAGA · inicio">
+        <img src="Isotipo%20(Home).png" alt="SAGA" class="nav-iso">
       </a>
       <div class="nav-links">
         <a href="#servicios">Servicios</a>
@@ -30,6 +29,16 @@
         <a href="#como-trabajamos">Cómo trabajamos</a>
         <a href="#contacto">Contacto</a>
         <a href="#contacto" class="nav-cta">Pedir presupuesto</a>
+        <div class="lang" id="lang">
+          <button class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-label="Idioma">
+            <span class="lang-cur">ES</span><span class="lang-car">▾</span>
+          </button>
+          <div class="lang-menu">
+            <a href="#" data-lang="ES" class="active">ES · Español</a>
+            <a href="#" data-lang="CA">CA · Català</a>
+            <a href="#" data-lang="EN">EN · English</a>
+          </div>
+        </div>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menú">
         <span></span><span></span><span></span>
@@ -44,6 +53,11 @@
     <a href="#como-trabajamos" class="mob-link">Cómo trabajamos</a>
     <a href="#contacto" class="mob-link">Contacto</a>
     <a href="#contacto" class="mob-link mob-link--cta">Presupuesto</a>
+    <div class="mob-lang">
+      <a href="#" data-lang="ES" class="active">ES</a>
+      <a href="#" data-lang="CA">CA</a>
+      <a href="#" data-lang="EN">EN</a>
+    </div>
   </div>
 
   <!-- ── HERO ── -->
@@ -60,25 +74,24 @@
     </div>
 
     <div class="hero-inner">
-      <img src="SAGA_WH_LOGO_LETRA%201.png" alt="SAGA" class="hero-wordmark">
-      <div class="hero-tag">
-        <span class="tag-pulse"></span>
-        Poblenou, Barcelona &ensp;·&ensp; Est. 1994
+      <div class="hero-top">
+        <div class="hero-brand">
+          <img src="SAGA_WH_LOGO_LETRA%201.png" alt="SAGA" class="hero-wordmark">
+          <span class="hero-wordmark-sub">Creacions Gràfiques</span>
+        </div>
+
+        <h1 class="hero-lead">Diseño <span>|</span> Impresión <span>|</span> Merchandising</h1>
+
+        <div class="hero-tag">
+          <span class="tag-pulse"></span>
+          Poblenou, Barcelona &ensp;·&ensp; Est. 1994
+        </div>
       </div>
 
-      <h1 class="hero-title">
-        <span class="ht-line">Imprimimos</span>
-        <span class="ht-line ht-outline">tu visión.</span>
-      </h1>
-
-      <div class="hero-foot">
-        <p class="hero-sub">
-          Diseño · Impresión · Merchandising
-          <span class="hero-sub-small">Más de 30 años haciendo marcas visibles.</span>
-        </p>
+      <div class="hero-bottom">
+        <p class="hero-desc">Más de 30 años de experiencia en el mundo de las artes gráficas.</p>
         <div class="hero-ctas">
           <a href="#contacto" class="btn btn-red magnetic"><span>Pedir presupuesto</span></a>
-          <a href="#servicios" class="btn btn-ghost magnetic"><span>Ver servicios</span></a>
         </div>
       </div>
     </div>
@@ -133,11 +146,6 @@
         <div class="stat-n"><span class="count" data-target="300">0</span><sup>+</sup></div>
         <div class="stat-l">Clientes satisfechos</div>
       </div>
-      <div class="stat-sep"></div>
-      <div class="stat reveal">
-        <div class="stat-n">48<sup>h</sup></div>
-        <div class="stat-l">Entrega express</div>
-      </div>
     </div>
   </section>
 
@@ -151,7 +159,7 @@
 
       <div class="srv-grid">
 
-        <div class="srv-card reveal" style="--c:#CC2B1B">
+        <div class="srv-card reveal" style="--c:#DF0C16">
           <div class="srv-num">01</div>
           <div class="srv-ico">
             <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -171,7 +179,7 @@
           <span class="srv-arrow">Ver más →</span>
         </div>
 
-        <div class="srv-card reveal" style="--c:#A3200F">
+        <div class="srv-card reveal" style="--c:#B00810">
           <div class="srv-num">02</div>
           <div class="srv-ico">
             <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -202,12 +210,12 @@
             </svg>
           </div>
           <h3>Merchan-<br>dising</h3>
-          <p>Packaging, bolsas, etiquetas y artículos promocionales que proyectan tu marca más allá del papel.</p>
+          <p>Del textil al packaging: llevamos tu marca a cualquier soporte más allá del papel.</p>
           <ul class="srv-list">
-            <li>Packaging a medida</li>
-            <li>Bolsas y etiquetas</li>
-            <li>Material promocional</li>
-            <li>Artículos corporativos</li>
+            <li>Sublimación: tazas y botellas</li>
+            <li>Serigrafía textil y bolsas de tela</li>
+            <li>Vinilo de corte y adhesivos</li>
+            <li>Ropa laboral personalizada</li>
           </ul>
           <span class="srv-arrow">Ver más →</span>
         </div>
@@ -268,7 +276,7 @@
         <div class="proc-arr">→</div>
         <div class="proc-step reveal">
           <div class="ps-num">02</div>
-          <h3>Preprensa</h3>
+          <h3>Revisión</h3>
           <p>Revisamos tus archivos, preparamos las planchas y te enviamos una prueba de color digital.</p>
         </div>
         <div class="proc-arr">→</div>
@@ -294,13 +302,12 @@
         <span class="sec-tag">Nuestros proyectos</span>
         <h2 class="sec-title light">Lo que hacemos<br>habla por sí solo.</h2>
       </header>
-      <div class="port-nav reveal">
-        <button class="pnav-btn" id="pPrev" aria-label="Anterior">←</button>
-        <button class="pnav-btn" id="pNext" aria-label="Siguiente">→</button>
-      </div>
     </div>
 
-    <div class="port-track" id="portTrack">
+    <div class="port-carousel">
+      <button class="pnav-btn pnav-btn--prev" id="pPrev" aria-label="Anterior">←</button>
+      <button class="pnav-btn pnav-btn--next" id="pNext" aria-label="Siguiente">→</button>
+      <div class="port-track" id="portTrack">
 
       <div class="port-item">
         <div class="port-bg" style="background-image: url('POSTERS_Mockup_2%201.png')"></div>
@@ -383,6 +390,60 @@
         <span class="port-num">09</span>
       </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLIENTS / TESTIMONIALS ── -->
+  <section class="clients" id="clientes">
+    <div class="wrap">
+      <header class="sec-hd reveal" style="text-align:center; align-items:center;">
+        <span class="sec-tag">Confían en nosotros</span>
+        <h2 class="sec-title light">Marcas que ya<br>imprimen con SAGA.</h2>
+      </header>
+    </div>
+
+    <!-- Logo marquee — reemplazar los nombres por logos reales (.png/.svg) cuando estén -->
+    <div class="logos" aria-label="Clientes">
+      <div class="logos-track">
+        <span class="logo-item">Norvell</span>
+        <span class="logo-item">Vallformosa</span>
+        <span class="logo-item">Mediapro</span>
+        <span class="logo-item">Estrella</span>
+        <span class="logo-item">Cacaolat</span>
+        <span class="logo-item">Camper</span>
+        <span class="logo-item">Desigual</span>
+        <span class="logo-item">Roca</span>
+        <!-- duplicado para el bucle continuo -->
+        <span class="logo-item">Norvell</span>
+        <span class="logo-item">Vallformosa</span>
+        <span class="logo-item">Mediapro</span>
+        <span class="logo-item">Estrella</span>
+        <span class="logo-item">Cacaolat</span>
+        <span class="logo-item">Camper</span>
+        <span class="logo-item">Desigual</span>
+        <span class="logo-item">Roca</span>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="testi-grid">
+        <figure class="testi reveal">
+          <div class="testi-stars">★★★★★</div>
+          <blockquote>Plazos impecables y un acabado de impresión que marca la diferencia. Llevamos años confiándoles toda nuestra cartelería.</blockquote>
+          <figcaption><strong>Marta Ferrer</strong><span>Directora de Marketing · Vallformosa</span></figcaption>
+        </figure>
+        <figure class="testi reveal">
+          <div class="testi-stars">★★★★★</div>
+          <blockquote>Del diseño al packaging final, todo bajo el mismo techo. Un equipo que entiende la marca y cuida cada detalle.</blockquote>
+          <figcaption><strong>Jordi Soler</strong><span>Fundador · Estudio Norvell</span></figcaption>
+        </figure>
+        <figure class="testi reveal">
+          <div class="testi-stars">★★★★★</div>
+          <blockquote>Gran formato, vinilos, señalética… siempre a tiempo y con una calidad que nuestros clientes notan. De total confianza.</blockquote>
+          <figcaption><strong>Laura Giménez</strong><span>Project Manager · Mediapro</span></figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
@@ -477,7 +538,10 @@
     <div class="wrap">
       <div class="ft-top">
         <div class="ft-brand">
-          <span class="ft-logo">saga</span>
+          <a href="#" class="ft-logo">
+            <img src="Isotipo%20(Home).png" alt="" class="ft-iso">
+            <span class="ft-name">saga<small>Creacions Gràfiques</small></span>
+          </a>
           <p>Artes gráficas en Poblenou, Barcelona.<br>Más de 30 años imprimiendo ideas.</p>
           <div class="ft-social">
             <a href="#" target="_blank" rel="noopener" aria-label="Instagram">
@@ -512,7 +576,7 @@
         </div>
       </div>
       <div class="ft-bottom">
-        <span>© 2025 SAGA Comunicación Gráfica · Todos los derechos reservados</span>
+        <span>© 2026 SAGA · Creacions Gràfiques · Todos los derechos reservados</span>
         <div class="ft-legal">
           <a href="#">Privacidad</a>
           <a href="#">Aviso legal</a>
@@ -520,6 +584,12 @@
       </div>
     </div>
   </footer>
+
+  <!-- Snackbar -->
+  <div class="snackbar" id="snackbar" role="status" aria-live="polite">
+    <span class="snack-ico">✓</span>
+    <span class="snack-msg">Consulta enviada correctamente</span>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
