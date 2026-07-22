@@ -21,7 +21,8 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo" aria-label="SAGA · inicio">
-        <img src="Isotipo%20(Home).png" alt="SAGA" class="nav-iso">
+        <img src="Isotipo%20(Home).png" alt="" class="nav-iso" aria-hidden="true">
+        <img src="SAGA_WH_LOGO_LETRA%201.png" alt="SAGA" class="nav-wordmark">
       </a>
       <div class="nav-links">
         <a href="#servicios">Servicios</a>
@@ -64,35 +65,31 @@
   <section class="hero" id="hero">
     <div class="hero-noise"></div>
     <div class="hero-glow"></div>
-    <div class="hero-scan"></div>
-    <canvas id="heroCanvas" class="hero-canvas"></canvas>
-    <div class="hero-hud" aria-hidden="true">
-      <span class="hud-c hud-tl"></span>
-      <span class="hud-c hud-tr"></span>
-      <span class="hud-c hud-bl"></span>
-      <span class="hud-c hud-br"></span>
+
+    <!-- Cuentahílos: el trazo se dibuja al cargar y bajo su lente aparece
+         la roseta de semitono CMYK (lo que ves al inspeccionar un impreso) -->
+    <div class="loupe" id="loupe" aria-hidden="true">
+      <canvas class="loupe-canvas" id="loupeCanvas"></canvas>
+      <img src="Isotipo%20(Home).png" alt="" class="loupe-art">
     </div>
 
     <div class="hero-inner">
-      <div class="hero-top">
-        <div class="hero-brand">
-          <img src="SAGA_WH_LOGO_LETRA%201.png" alt="SAGA" class="hero-wordmark">
-          <span class="hero-wordmark-sub">Creacions Gràfiques</span>
-        </div>
-
-        <h1 class="hero-lead">Diseño <span>|</span> Impresión <span>|</span> Merchandising</h1>
-
-        <div class="hero-tag">
-          <span class="tag-pulse"></span>
-          Poblenou, Barcelona &ensp;·&ensp; Est. 1994
-        </div>
+      <div class="hero-brand">
+        <img src="SAGA_WH_LOGO_LETRA%201.png" alt="SAGA" class="hero-wordmark">
+        <span class="hero-wordmark-sub">Creacions Gràfiques</span>
       </div>
 
-      <div class="hero-bottom">
-        <p class="hero-desc">Más de 30 años de experiencia en el mundo de las artes gráficas.</p>
-        <div class="hero-ctas">
-          <a href="#contacto" class="btn btn-red magnetic"><span>Pedir presupuesto</span></a>
-        </div>
+      <p class="hero-kicker">Diseño <span>|</span> Impresión <span>|</span> Merchandising</p>
+      <h1 class="hero-h1">Servicios gráficos integrales.</h1>
+
+      <div class="hero-tag">
+        <span class="tag-pulse"></span>
+        Poblenou, Barcelona &ensp;·&ensp; Est. 1994
+      </div>
+
+      <p class="hero-desc">Más de 30 años de experiencia en el mundo de las artes gráficas.</p>
+      <div class="hero-ctas">
+        <a href="#contacto" class="btn btn-red magnetic"><span>Pedir presupuesto</span></a>
       </div>
     </div>
 
@@ -154,7 +151,7 @@
     <div class="wrap">
       <header class="sec-hd reveal">
         <span class="sec-tag">¿Qué hacemos?</span>
-        <h2 class="sec-title">Nuestros<br>servicios</h2>
+        <h2 class="sec-title light">Nuestros<br>servicios</h2>
       </header>
 
       <div class="srv-grid">
@@ -540,7 +537,10 @@
         <div class="ft-brand">
           <a href="#" class="ft-logo">
             <img src="Isotipo%20(Home).png" alt="" class="ft-iso">
-            <span class="ft-name">saga<small>Creacions Gràfiques</small></span>
+            <span class="ft-name">
+              <img src="SAGA_WH_LOGO_LETRA%201.png" alt="SAGA" class="ft-wordmark">
+              <small>Creacions Gràfiques</small>
+            </span>
           </a>
           <p>Artes gráficas en Poblenou, Barcelona.<br>Más de 30 años imprimiendo ideas.</p>
           <div class="ft-social">

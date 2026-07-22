@@ -213,193 +213,114 @@ if (form) {
   });
 }
 
-// ── Hero Canvas Shader ─────────────────────────────────────
+
+// ── Cuentahílos · roseta de semitono CMYK bajo la lente ────
+// Un cuentahílos sirve para inspeccionar la trama de un impreso:
+// bajo la lente mostramos papel con los 4 tramados a sus ángulos reales.
 (function () {
-  const canvas = document.getElementById('heroCanvas');
-  if (!canvas) return;
+  const wrap   = document.getElementById('loupe');
+  const canvas = document.getElementById('loupeCanvas');
+  if (!wrap || !canvas) return;
 
-  const ctx   = canvas.getContext('2d');
-  const hero  = canvas.closest('.hero');
-  const RED   = '223,12,22';
-  const GAP   = 50;
-  const PUSH  = 140;   // mouse repel radius
-  const STR   = 62;    // repel strength
+  const ctx    = canvas.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  let W, H, cols;
-  let dots    = [];
-  let ripples = [];
-  let scanY   = 0;
-  const mouse = { x: -999, y: -999 };
+  // Elipse de la lente, normalizada a la caja del isotipo
+  const LENS = { cx: 0.462, cy: 0.245, rx: 0.122, ry: 0.055 };
 
-  // Build dot grid — DPR-aware so retina screens render crisply
-  function setup() {
-    const dpr = window.devicePixelRatio || 1;
-    W = canvas.offsetWidth;
-    H = canvas.offsetHeight;
+  // Ángulos de trama reales de cuatricromía
+  const SCREENS = [
+    { rgb: '0,174,239', angle: 15 },   // Cyan
+    { rgb: '236,0,140', angle: 75 },   // Magenta
+    { rgb: '255,242,0', angle: 0  },   // Yellow
+    { rgb: '26,23,27',  angle: 45 }    // Black
+  ];
+
+  let W = 0, H = 0, t = 0, reveal = 0, started = false;
+  const par = { x: 0, y: 0, tx: 0, ty: 0 };
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = wrap.offsetWidth;
+    H = wrap.offsetHeight;
     canvas.width  = W * dpr;
     canvas.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = Math.ceil(W / GAP) + 1;
-    const rows = Math.ceil(H / GAP) + 1;
-    dots = [];
-    for (let r = 0; r <= rows; r++)
-      for (let c = 0; c <= cols; c++)
-        dots.push({ ox: c * GAP, oy: r * GAP, x: c * GAP, y: r * GAP });
   }
 
-  // Events — track on the hero section so buttons still work
-  hero.addEventListener('mousemove', e => {
-    const b = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - b.left;
-    mouse.y = e.clientY - b.top;
-  });
-  hero.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
-
-  hero.addEventListener('click', e => {
-    const b = canvas.getBoundingClientRect();
-    const x = e.clientX - b.left;
-    const y = e.clientY - b.top;
-    // Three concentric rings, staggered
-    for (let i = 0; i < 3; i++) {
-      setTimeout(() => ripples.push({
-        x, y, r: 0, life: 1,
-        speed: 4.5 + i * 1.5
-      }), i * 80);
-    }
-  });
-
-  window.addEventListener('resize', setup);
-
-  // Main loop
-  function tick() {
+  function draw() {
     ctx.clearRect(0, 0, W, H);
 
-    // ── update dot positions ────────────────────────────────
-    dots.forEach(d => {
-      // Mouse push
-      const mdx = d.ox - mouse.x;
-      const mdy = d.oy - mouse.y;
-      const md  = Math.hypot(mdx, mdy);
-      let tx = d.ox, ty = d.oy;
+    if (reveal > 0.001) {
+      const cx = LENS.cx * W, cy = LENS.cy * H;
+      const rx = LENS.rx * W * reveal, ry = LENS.ry * H * reveal;
 
-      if (md < PUSH) {
-        const f = (1 - md / PUSH);
-        const a = Math.atan2(mdy, mdx);
-        tx = d.ox + Math.cos(a) * f * STR;
-        ty = d.oy + Math.sin(a) * f * STR;
-      }
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.clip();
 
-      // Ripple wave push
-      ripples.forEach(rip => {
-        const rdx  = d.ox - rip.x;
-        const rdy  = d.oy - rip.y;
-        const rd   = Math.hypot(rdx, rdy);
-        const wave = Math.exp(-((rd - rip.r) ** 2) / 700) * rip.life;
-        if (wave > 0.015) {
-          const a = Math.atan2(rdy, rdx);
-          tx += Math.cos(a) * wave * 35;
-          ty += Math.sin(a) * wave * 35;
+      // Papel bajo la lente
+      ctx.fillStyle = '#F7F4ED';
+      ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+
+      // Tintas: subtractivo real
+      ctx.globalCompositeOperation = 'multiply';
+      const pitch = Math.max(5, W * 0.0085);
+      const R = Math.max(rx, ry) + pitch * 2;
+
+      SCREENS.forEach((s, si) => {
+        const a = (s.angle * Math.PI) / 180;
+        const cos = Math.cos(a), sin = Math.sin(a);
+        ctx.fillStyle = 'rgb(' + s.rgb + ')';
+        for (let u = -R; u <= R; u += pitch) {
+          for (let v = -R; v <= R; v += pitch) {
+            const x = cx + u * cos - v * sin;
+            const y = cy + u * sin + v * cos;
+            // onda lenta de densidad de tinta: la roseta "respira"
+            const w = Math.sin((u + v * 0.6 + t * 16 + si * 47) * 0.021) * 0.5 + 0.5;
+            ctx.beginPath();
+            ctx.arc(x, y, pitch * (0.13 + w * 0.17), 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
       });
+      ctx.restore();
 
-      // Spring lerp toward target
-      d.x += (tx - d.x) * 0.14;
-      d.y += (ty - d.y) * 0.14;
-    });
-
-    // ── draw grid lines (adjacent only — O(n)) ─────────────
-    ctx.lineWidth = 0.7;
-    dots.forEach((d, i) => {
-      const right  = dots[i + 1];
-      const bottom = dots[i + cols + 1]; // +1 because we overshoot by 1
-
-      if (right && right.oy === d.oy) {
-        const stretch = Math.hypot(d.x - right.x, d.y - right.y) / GAP;
-        const a = Math.max(0, 0.22 - stretch * 0.1);
-        if (a > 0.01) {
-          ctx.beginPath();
-          ctx.moveTo(d.x, d.y);
-          ctx.lineTo(right.x, right.y);
-          ctx.strokeStyle = `rgba(${RED},${a.toFixed(2)})`;
-          ctx.stroke();
-        }
-      }
-      if (bottom) {
-        const stretch = Math.hypot(d.x - bottom.x, d.y - bottom.y) / GAP;
-        const a = Math.max(0, 0.22 - stretch * 0.1);
-        if (a > 0.01) {
-          ctx.beginPath();
-          ctx.moveTo(d.x, d.y);
-          ctx.lineTo(bottom.x, bottom.y);
-          ctx.strokeStyle = `rgba(${RED},${a.toFixed(2)})`;
-          ctx.stroke();
-        }
-      }
-    });
-
-    // ── draw dots ──────────────────────────────────────────
-    dots.forEach(d => {
-      const prox = Math.max(0, 1 - Math.hypot(d.ox - mouse.x, d.oy - mouse.y) / PUSH);
+      // Brillo del cristal
       ctx.beginPath();
-      ctx.arc(d.x, d.y, 1.3 + prox * 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${RED},${(0.18 + prox * 0.72).toFixed(2)})`;
-      ctx.fill();
-    });
-
-    // ── mouse aura glow ────────────────────────────────────
-    if (mouse.x > 0 && mouse.x < W) {
-      const g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 90);
-      g.addColorStop(0, `rgba(${RED},0.1)`);
-      g.addColorStop(1, `rgba(${RED},0)`);
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-    }
-
-    // ── ripple rings ───────────────────────────────────────
-    ripples = ripples.filter(r => r.life > 0.015);
-    ripples.forEach(rip => {
-      ctx.beginPath();
-      ctx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(${RED},${(rip.life * 0.7).toFixed(2)})`;
-      ctx.lineWidth = 1.5;
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,.45)';
+      ctx.lineWidth = 1.2;
       ctx.stroke();
-      rip.r    += rip.speed;
-      rip.life *= 0.96;
-    });
-
-    // ── radar scan line ────────────────────────────────────
-    scanY = (scanY + 0.8) % H;
-    // Soft halo above/below the line
-    const halo = ctx.createLinearGradient(0, scanY - 12, 0, scanY + 12);
-    halo.addColorStop(0,   `rgba(${RED},0)`);
-    halo.addColorStop(0.5, `rgba(${RED},0.06)`);
-    halo.addColorStop(1,   `rgba(${RED},0)`);
-    ctx.fillStyle = halo;
-    ctx.fillRect(0, scanY - 12, W, 24);
-    // Bright core line
-    const sg = ctx.createLinearGradient(0, 0, W, 0);
-    sg.addColorStop(0,    `rgba(${RED},0)`);
-    sg.addColorStop(0.08, `rgba(${RED},0.45)`);
-    sg.addColorStop(0.92, `rgba(${RED},0.45)`);
-    sg.addColorStop(1,    `rgba(${RED},0)`);
-    ctx.fillStyle = sg;
-    ctx.fillRect(0, scanY - 1, W, 2);
-
-    // ── HUD cursor readout ─────────────────────────────────
-    if (mouse.x > 0 && mouse.x < W - 10) {
-      const lx = mouse.x + 24 > W - 130 ? mouse.x - 124 : mouse.x + 24;
-      const ly = mouse.y > 22 ? mouse.y - 12 : mouse.y + 24;
-      ctx.font      = '10px "Courier New", monospace';
-      ctx.fillStyle = `rgba(${RED},0.65)`;
-      ctx.fillText(
-        `X:${String(Math.round(mouse.x)).padStart(4,'0')}  Y:${String(Math.round(mouse.y)).padStart(4,'0')}`,
-        lx, ly
-      );
     }
 
-    requestAnimationFrame(tick);
+    if (!reduce) {
+      t += 1 / 60;
+      par.x += (par.tx - par.x) * 0.06;
+      par.y += (par.ty - par.y) * 0.06;
+      wrap.style.transform = 'translateY(-50%) translate(' + par.x.toFixed(2) + 'px,' + par.y.toFixed(2) + 'px)';
+    }
+    if (reveal < 1 && started) reveal = Math.min(1, reveal + 0.02);
+
+    requestAnimationFrame(draw);
   }
 
-  setup();
-  tick();
+  const hero = document.getElementById('hero');
+  if (hero && !reduce) {
+    hero.addEventListener('mousemove', e => {
+      const r = hero.getBoundingClientRect();
+      par.tx = ((e.clientX - r.left) / r.width  - 0.5) * -26;
+      par.ty = ((e.clientY - r.top)  / r.height - 0.5) * -18;
+    });
+    hero.addEventListener('mouseleave', () => { par.tx = 0; par.ty = 0; });
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  if (reduce) { reveal = 1; started = true; }
+  else setTimeout(() => { started = true; }, 1500);
+
+  draw();
 })();

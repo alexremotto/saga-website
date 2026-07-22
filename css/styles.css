@@ -34,6 +34,32 @@
 
 html { scroll-behavior: smooth; }
 
+/* Accesibilidad: respetar quien pide menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* No dejar contenido oculto esperando al observer de scroll */
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
+/* Impresión: fuera overlays fijos y contenido oculto */
+@media print {
+  .mob-menu, .cursor, .snackbar, .scroll-hint, .loupe { display: none !important; }
+  .nav { position: static; }
+  .hero { min-height: auto; padding-bottom: 4rem; }
+  .reveal, .hero-brand, .hero-kicker, .hero-h1,
+  .hero-tag, .hero-desc, .hero-ctas {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 body {
   font-family: var(--ff);
   font-size: var(--fs-body);
@@ -197,11 +223,17 @@ img, video { display: block; max-width: 100%; }
 .nav-logo {
   display: flex;
   align-items: center;
+  gap: .6rem;
   transition: transform .35s var(--ease);
+}
+.nav-wordmark {
+  width: 74px;
+  height: auto;
+  transition: opacity .3s var(--ease);
 }
 
 .nav-iso {
-  height: 36px;
+  height: 46px;
   width: auto;
   opacity: 0.9;
   animation: isoBob 6s ease-in-out infinite;
@@ -357,10 +389,7 @@ img, video { display: block; max-width: 100%; }
   padding-top: var(--nav-h);
   padding-bottom: 10rem;
   overflow: hidden;
-  /* Provisional: storefront photo cropped from mockup_homepage.png — swap for clean asset */
-  background:
-    linear-gradient(100deg, rgba(10,10,10,.92) 0%, rgba(10,10,10,.72) 46%, rgba(10,10,10,.5) 100%),
-    url('../hero-fachada.jpg') center / cover no-repeat;
+  background: var(--black);
 }
 
 .hero-noise {
@@ -379,65 +408,49 @@ img, video { display: block; max-width: 100%; }
   pointer-events: none;
 }
 
-/* Scan line — sweeps once on load, print-press metaphor */
-.hero-scan {
+/* ── Cuentahílos (linen tester) + CMYK halftone lens ── */
+.loupe {
   position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right,
-    transparent 0%,
-    rgba(223,12,22,.6) 20%,
-    rgba(255,255,255,.25) 50%,
-    rgba(223,12,22,.6) 80%,
-    transparent 100%
-  );
-  top: 0;
+  top: 50%;
+  right: clamp(-4rem, 2vw, 6rem);
+  transform: translateY(-50%);
+  width: clamp(380px, 44vw, 680px);
+  aspect-ratio: 128 / 116;
+  z-index: 1;
   pointer-events: none;
-  z-index: 4;
-  animation: heroScan 1.8s 0.1s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-  opacity: 0;
+  will-change: transform;
 }
 
-@keyframes heroScan {
-  0%   { top: 0%;   opacity: 0; }
-  4%   { opacity: 1; }
-  90%  { opacity: 0.5; }
-  100% { top: 100%; opacity: 0; }
+/* Line art — sweeps in on load as if being drawn */
+@property --sweep {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 
-/* Hero canvas shader */
-.hero-canvas {
+.loupe-art {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  z-index: 2;
+  object-fit: contain;
+  opacity: .22;
+  -webkit-mask-image: conic-gradient(from -100deg at 50% 52%, #000 var(--sweep), transparent 0);
+  mask-image: conic-gradient(from -100deg at 50% 52%, #000 var(--sweep), transparent 0);
+  animation: loupeSweep 1.7s .35s var(--ease) forwards;
 }
 
-/* HUD corner brackets */
-.hero-hud {
+@keyframes loupeSweep {
+  from { --sweep: 0deg; }
+  to   { --sweep: 360deg; }
+}
+
+/* Halftone rosette lives under the lens ellipse */
+.loupe-canvas {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.hud-c {
-  position: absolute;
-  width: 28px; height: 28px;
-  border-color: rgba(223,12,22,.55);
-  border-style: solid;
-  animation: hudPulse 4s ease-in-out infinite;
-}
-.hud-tl { top: 2.5rem; left: 2.5rem;  border-width: 2px 0 0 2px; }
-.hud-tr { top: 2.5rem; right: 2.5rem; border-width: 2px 2px 0 0; animation-delay: 1s; }
-.hud-bl { bottom: 2.5rem; left: 2.5rem;  border-width: 0 0 2px 2px; animation-delay: 2s; }
-.hud-br { bottom: 2.5rem; right: 2.5rem; border-width: 0 2px 2px 0; animation-delay: 3s; }
-
-@keyframes hudPulse {
-  0%,100% { opacity: .55; }
-  50%      { opacity: .15; }
+  width: 100%;
+  height: 100%;
 }
 
 .hero-inner {
@@ -449,8 +462,8 @@ img, video { display: block; max-width: 100%; }
   padding: 0 2rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  gap: clamp(2.5rem, 11vh, 7rem);
 }
 
 /* Hero brand (wordmark + tagline) — large on load, fades out on scroll */
@@ -495,9 +508,10 @@ img, video { display: block; max-width: 100%; }
   letter-spacing: .2em;
   text-transform: uppercase;
   color: rgba(244,239,230,.4);
-  margin-top: 1.5rem;
+  margin-top: 1.75rem;
+  margin-bottom: 1.5rem;
   opacity: 0;
-  animation: fadeUp .8s 1s var(--ease) forwards;
+  animation: fadeUp .8s .76s var(--ease) forwards;
 }
 
 .tag-pulse {
@@ -509,21 +523,29 @@ img, video { display: block; max-width: 100%; }
 }
 @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.2 } }
 
-/* Pipe subtitle — Diseño | Impresión | Merchandising */
-.hero-lead {
-  font-family: var(--ff);
+/* Eyebrow — Diseño | Impresión | Merchandising */
+.hero-kicker {
+  font-size: clamp(.75rem, 1vw, .875rem);
   font-weight: 700;
-  font-size: clamp(1.5rem, 3.4vw, 2.9rem);
-  line-height: 1.1;
-  letter-spacing: .005em;
-  color: var(--cream);
-  opacity: 0;
-  animation: fadeUp .8s .55s var(--ease) forwards;
-}
-.hero-lead span {
+  letter-spacing: .18em;
+  text-transform: uppercase;
   color: var(--red);
-  font-weight: 400;
-  margin: 0 .3em;
+  margin-bottom: .9rem;
+  opacity: 0;
+  animation: fadeUp .8s .5s var(--ease) forwards;
+}
+.hero-kicker span { opacity: .45; font-weight: 400; margin: 0 .35em; }
+
+.hero-h1 {
+  font-family: var(--ff);
+  font-weight: var(--fw-black);
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  line-height: .98;
+  letter-spacing: -.03em;
+  color: var(--cream);
+  max-width: 14ch;
+  opacity: 0;
+  animation: fadeUp .8s .62s var(--ease) forwards;
 }
 
 .hero-desc {
@@ -1372,13 +1394,8 @@ img, video { display: block; max-width: 100%; }
 .ft-name {
   display: flex;
   flex-direction: column;
-  font-family: var(--ff);
-  font-weight: 800;
-  font-size: 2.2rem;
-  line-height: .9;
-  letter-spacing: .02em;
-  color: var(--cream);
 }
+.ft-wordmark { width: 116px; height: auto; }
 .ft-name small {
   font-size: .72rem;
   font-weight: 600;
