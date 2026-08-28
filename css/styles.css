@@ -456,18 +456,16 @@ img, video { display: block; max-width: 100%; }
   position: relative;
   z-index: 3;
   width: 100%;
-  max-width: 1360px;
+  /* Mismo margen izq. que las secciones (que llevan doble padding: sección 2rem
+     + .wrap 2rem = 4rem). max-width 1424 = 1360 + 4rem para que el borde de
+     contenido y el centrado coincidan exactamente con .wrap a cualquier ancho. */
+  max-width: 1424px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 4rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-}
-
-/* En desktop el bloque del hero respira más desde la izquierda (como el mockup) */
-@media (min-width: 900px) {
-  .hero-inner { padding-left: clamp(3rem, 8vw, 9rem); }
 }
 
 /* Hero brand (wordmark + tagline) — large on load, fades out on scroll */
@@ -1569,9 +1567,10 @@ img, video { display: block; max-width: 100%; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
 
-  /* Horizontal padding — match hero-inner at 1.25rem */
+  /* Horizontal padding. Las secciones llevan doble (sección 1.25 + .wrap 1.25
+     = 2.5rem); el hero iguala ese margen con 2.5rem en hero-inner. */
   .wrap       { padding: 0 1.25rem; }
-  .hero-inner { padding: 0 1.25rem; }
+  .hero-inner { padding: 0 2.5rem; }
 
   /* Section vertical padding: desktop 8rem → mobile ~4rem */
   .stats    { padding: 3rem 1.25rem; }
